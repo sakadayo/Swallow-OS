@@ -1,0 +1,40 @@
+2025/11/30 sakadayo
+https://qiita.com/DanfuncL/items/b037c844e541a3970fd4
+以上のサイトから引用したコードをUEFI\UEFITestCode.cに記述した。
+且つ、以上のサイトから引用したコマンドを用いて上記のC言語コードを
+Clang(あるいはLLVM)と言うツールも用いてビルドした。
+その実験は成功した為、今日このファイルにUEFIアプリケーションの作り方を記述する。
+
+サイト内に記述されているコマンドはコマンドプロンプト向けでは無く、近年Windowsに追加された
+PowerShellと言うソフト向けのコマンドである。
+その為GithubCopilotに事の次第を報告し、コマンドをコマンドプロンプト向けに修正した。
+修正したコマンドは以下の欄に記述する。
+<成功したコマンド>
+「clang -target x86_64-windows-msvc -mno-red-zone -fno-stack-protector -fshort-wchar -Wall UEFI\UEFITestCode.c -fuse-ld=lld-link "-Wl,-subsystem:efi_application" "-Wl,-entry:EfiMain" "-Wl,-out:UEFI\BOOTX64.efi" -ffreestanding -flto -nostdlib」
+これ以降で.efiファイルを生成する時があれば、このコマンドを使うのも良いと思われる。
+コマンドの内容の詳細は上記のサイトにて説明されている。
+上記のコマンドでは、libと言う謎の拡張子のファイルが追加されるが、QEMUでのUEFIアプリケーションの実行には一切の影響は無い。
+Clangと言うツールの仕様上、エントリポイント(mainの関数)の上に
+//以下の内容はClangにシンボルを認証させる為のおまじない
+#ifdef __cplusplus
+extern "C"
+#endif
+__declspec(dllexport)
+//以上の内容は以下略
+と言う内容を追加せねばならない。コメントは無視して頂いて構わない。
+
+UEFI\UEFITestCode.cは上記のサイトよりの引用したコードである。
+上記のサイトのコードでは、UEFIヘッダファイルの全ての内容を自力で記入している。
+EDKII等のツールの使用も検討したが、非常に難解であった為にこちらの方が簡単であると考える。
+自力でヘッダファイルの内容を書くにおいて、まずはUEFI独特のデータ型等々の記入が必要であると考える。
+https://uefi.org/specs/UEFI/2.10/02_Overview.html#calling-conventions
+上記のサイトに記入されているデータ型をtypedefあるいはdefineで定義する必要がある。
+どの様な内容をtypedefあるいはdefineで定義するか悩んだ時は、GithubのEDKIIの公式のヘッダファイルを見てみるのが良いと考える。
+https://github.com/tianocore/edk2/blob/master/MdePkg/Include/Base.h
+https://github.com/tianocore/edk2/blob/master/MdePkg/Include/Uefi/UefiBaseType.h
+以上のサイトのヘッダファイルにて記述されている。
+https://uefi.org/specs/UEFI/2.10/04_EFI_System_Table.html
+そして以上のサイトから、ハンドル・プロトコル等の定義が記述されている。
+以上の内容を同じくコード内に定義し、そこからアドレスでUEFIの関数を呼び出す。
+
+以降追記の可能性あり。
