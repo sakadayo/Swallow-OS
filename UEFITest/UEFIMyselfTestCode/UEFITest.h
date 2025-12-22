@@ -4,8 +4,15 @@
 #define IN
 #define OUT
 #define EFIAPI
+typedef struct{
+    UINT32 Data1;
+    UINT16 Data2;
+    UINT16 Data3;
+    UINT8 Data4[8];
+}EFI_GUID;
 typedef void VOID;
 typedef __int32 INT32;
+typedef unsigned char UINT8;
 typedef unsigned short UINT16;
 typedef unsigned __int32 UINT32;
 typedef unsigned __int64 UINT64;
@@ -89,6 +96,28 @@ typedef EFI_STATUS(EFIAPI *EFI_TEXT_SET_MODE)(
 );
 //ここにEFI_TEXT_QUERY_MODE以降のそれ以上にあるコードを書く事
 //コードの所在地(Include/Protocol/SimpleTextOut.h内の242行目まで実装し、それ以上を実装する事)
+typedef EFI_STATUS(EFIAPI *EFI_TEXT_QUERY_MODE)(
+    IN EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
+    IN UINTN ModeNumber,
+    OUT UINTN *Columns,
+    OUT UINTN *Rows
+);
+typedef EFI_STATUS(EFIAPI *EFI_TEXT_TEST_STRING)(
+    IN EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
+    IN CHAR16 *String
+);
+typedef EFI_STATUS(EFIAPI *EFI_TEXT_STRING)(
+    IN EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
+    IN CHAR16 *String
+);
+typedef EFI_STATUS(EFIAPI *EFI_TEXT_RESET)(
+    IN EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This,
+    IN BOOLEAN ExtendedVerification
+);
+typedef struct {
+    EFI_GUID VendorGuid;
+    VOID    *VendorTable;
+} EFI_CONFIGURATION_TABLE;
 typedef struct{
     EFI_TABLE_HEADER Hdr;
     CHAR16 *FirmwareVendor;
