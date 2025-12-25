@@ -37,4 +37,6 @@ https://uefi.org/specs/UEFI/2.10/04_EFI_System_Table.html
 そして以上のサイトから、ハンドル・プロトコル等の定義が記述されている。
 以上の内容を同じくコード内に定義し、そこからアドレスでUEFIの関数を呼び出す。
 
+<GCC-Mingwの場合>
+cmd /c "x86_64-w64-mingw32-gcc -Wall -Wextra -e EfiApplicationEntryPoint -nostdinc -nostdlib -fno-builtin -Wl,--subsystem,10 -IUEFITest/UEFIMyselfTestCode -o UEFITest/UEFIMyselfTestCode/BOOTX64.efi UEFITest/UEFIMyselfTestCode/UEFITestCodeMyself.c"
 以降追記の可能性あり。
