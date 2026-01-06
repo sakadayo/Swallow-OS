@@ -1,0 +1,8 @@
+Swallow-OS Boot Protocol(日本語版)
+①メモリ上にはkernelディレクトリの内容を置く事。
+②メモリのエントリポイントは以下の様に定義される。
+typedef void (*kernel_main)(char[] boot_info);
+以上の定義を以て、以下の様にジャンプする。
+void *entry_addr = (void*)0x100000;
+kernel_main_t k = (kernel_main)entry_addr;
+k(boot_info);
