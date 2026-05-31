@@ -333,6 +333,7 @@ typedef EFI_STATUS (EFIAPI *EFI_PROTOCOLS_PER_HANDLE) (IN EFI_HANDLE Handle,OUT 
 //七章三部十五節に記載せらるEFI_BOOT_SERVICES.LocateHandleBuffer()の定義
 typedef EFI_STATUS (EFIAPI *EFI_LOCATE_HANDLE_BUFFER) (IN EFI_LOCATE_SEARCH_TYPE SearchType,IN EFI_GUID *Protocol OPTIONAL,IN VOID *SeachKey OPTIONAL, OUT UINTN *NoHandles,OUT EFI_HANDLE **Buffer);
 
-//七章三部十六節
+//七章三部十六節に記載せらるEFI_BOOT_SERVICES.LocateProtocol()の定義
+typedef EFI_
 
 #endif
