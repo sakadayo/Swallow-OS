@@ -334,6 +334,30 @@ typedef EFI_STATUS (EFIAPI *EFI_PROTOCOLS_PER_HANDLE) (IN EFI_HANDLE Handle,OUT 
 typedef EFI_STATUS (EFIAPI *EFI_LOCATE_HANDLE_BUFFER) (IN EFI_LOCATE_SEARCH_TYPE SearchType,IN EFI_GUID *Protocol OPTIONAL,IN VOID *SeachKey OPTIONAL, OUT UINTN *NoHandles,OUT EFI_HANDLE **Buffer);
 
 //七章三部十六節に記載せらるEFI_BOOT_SERVICES.LocateProtocol()の定義
-typedef EFI_
+typedef EFI_STATUS (EFIAPI *EFI_LOCATE_PROTOCOL) (IN EFI_GUID *Protocol,IN VOID *Registration OPTIONAL,OUT VOID **Interface);
+
+//七章三部十七節に記載せらるEFI_BOOT_SERVICES.InstallMultipleProtocolInterfaces()の定義
+typedef EFI_STATUS (EFIAPI *EFI_INSTALL_MULTIPLE_PROTOCOL_INTERFACES) (IN OUT EFI_HANDLE *Handle,...);
+
+//七章三部十八節に記載せらるEFI_BOOT_SERVICES.UninstallMultipleProtocolInterfaces()の定義
+typedef EFI_STATUS (EFIAPI *EFI_UNINSTALL_MULTIPLE_PROTOCOL_INTERFACES) (IN EFI_HANDLE Handle,...);
+
+//七章四部一節に記載せらるEFI_BOOT_SERVICES.LoadImage()の定義
+typedef EFI_STATUS (EFIAPI *EFI_IMAGE_LOAD)(IN BOOLEAN BootPolicy,IN EFI_HANDLE ParentImageHandle,IN EFI_DEVICE_PATH_PROTOCOL *DevicePath OPTIONAL,IN VOID *SourceBuffer OPTIONAL,IN UINTN SourceSize,OUT EFI_HANDLE *ImageHandle);
+
+//七章四部二節に記載せらるEFI_BOOT_SERVICES.StartImage()の定義
+typedef EFI_STATUS (EFIAPI *EFI_IMAGE_START)(IN EFI_HANDLE ImageHandle,OUT UINTN *ExitDataSize,OUT CHAR16 **ExitData OPTIONAL);
+
+//七章四部三節に記載せらるEFI_BOOT_SERVICES.UnloadImage()の定義
+typedef EFI_STATUS (EFIAPI *EFI_IMAGE_UNLOAD)(IN EFI_HANDLE ImageHandle);
+
+//七章四部四節に記載せらるEFI_IMAGE_ENTRY_POINTの定義
+typedef EFI_STATUS (EFIAPI *EFI_IMAGE_ENTRY_POINT)(IN EFI_HANDLE ImageHandle,IN EFI_SYSTEM_TABLE *SystemTable);
+
+//七章四部五節に記載せらるEFI_BOOT_SERVICES.Exit()の定義
+typedef EFI_STATUS (EFIAPI *EFI_EXIT)(IN EFI_HANDLE ImageHandle,IN EFI_STATUS ExitStatus,IN UINTN ExitDataSize,IN CHAR16 *ExitData OPTIONAL);
+
+//七章四部六節に記載せらるEFI_BOOT_SERVICES.ExitBootServices()の定義
+typedef EFI_STATUS (EFIAPI *EFI_EXIT_BOOT_SERVICES)(IN EFI_HANDLE ImageHandle, IN UINTN MapKey);
 
 #endif
