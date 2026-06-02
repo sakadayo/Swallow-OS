@@ -360,4 +360,99 @@ typedef EFI_STATUS (EFIAPI *EFI_EXIT)(IN EFI_HANDLE ImageHandle,IN EFI_STATUS Ex
 //七章四部六節に記載せらるEFI_BOOT_SERVICES.ExitBootServices()の定義
 typedef EFI_STATUS (EFIAPI *EFI_EXIT_BOOT_SERVICES)(IN EFI_HANDLE ImageHandle, IN UINTN MapKey);
 
+//七章五部一節に記載せらるEFI_BOOT_SERVICES.SetWatchdogTimer()の定義
+typedef EFI_STATUS (EFIAPI *EFI_SET_WATCHDOG_TIMER)(IN UINTN Timeout,IN UINT64 WatchdogCode,IN UINTN DataSize,IN CHAR16 *WatchdogData OPTIONAL);
+
+//七章五部二節に記載せらるEFI_BOOT_SERVICES.Stall()の定義
+typedef EFI_STATUS (EFIAPI *EFI_STALL)(IN UINTN Microseconds);
+
+//七章五部三節に記載せらるEFI_BOOT_SERVICES.CopyMem()の定義
+typedef VOID (EFIAPI *EFI_COPY_MEM)(IN VOID *Destination,IN VOID *Source,IN UINTN Length);
+
+//七章五部四節に記載せらるEFI_BOOT_SERVICES.SetMem()の定義
+typedef VOID (EFIAPI *EFI_SET_MEM)(IN VOID *Buffer,IN UINTN Size,IN UINT8 Value);
+
+//七章五部五節に記載せらるEFI_BOOT_SERVICES.GetNextMonotonicCount()の定義
+typedef EFI_STATUS (EFIAPI *EFI_GET_NEXT_MONOTONIC_COUNT)(OUT UINT64 *Count);
+
+//七章五部六節に記載せらるEFI_BOOT_SERVICES.InstallConfigurationTable()の定義
+typedef EFI_STATUS (EFIAPI *EFI_INSTALL_CONFIGURATION_TABLE)(IN EFI_GUID *Guid,IN VOID *Table);
+
+//七章五部七節に記載せらるEFI_BOOT_SERVICES.CalculateCrc32()の定義
+typedef EFI_STATUS (EFIAPI *EFI_CALCULATE_CRC32)(IN VOID *Data,IN UINTN DataSize,OUT UINT32 *Crc32);
+
+//八章二部一節に記載せらるGetVariable()の定義
+typedef EFI_STATUS GetVariable(IN CHAR16 *VariableName,IN EFI_GUID *VendorGuid,OUT UINT32 *Attributes OPTIONAL,IN OUT UINTN *DataSize,OUT VOID *Data OPTIONAL);
+#define EFI_VARIABLE_NON_VOLATILE 0x00000001
+#define EFI_VARIABLE_BOOTSERVICE_ACCESS 0x00000002
+#define EFI_VARIABLE_RUNTIME_ACCESS 0x00000004
+#define EFI_VARIABLE_HARDWARE_ERROR_RECORD 0x00000008
+//Reserved 0x00000010(将来的に何か追加の可能性があり)
+#define EFI_VARIABLE_TIME_BASED_AUTHENTICATED_WRITE_ACCESS 0x00000020
+#define EFI_VARIABLE_APPEND_WRITE 0x00000040
+#define EFI_VARIABLE_ENHANCED_AUTHENTICATED_ACCESS 0x00000080
+typedef struct{ UINT8 Type; UINT32 IdSize; }EFI_VARIABLE_AUTHENTICATION_3_CERT_ID;
+
+//八章二部二節に記載せらるGetNextVariableName()の定義
+typedef EFI_STATUS GetNextVariableName(IN OUT UINTN *VariableNameSize,IN OUT CHAR16 *VariableName,IN OUT EFI_GUID *VendorGuid);
+
+//八章二部三節に記載せらるSetVariable()の定義
+typedef EFI_TIME EFI_TIME;
+typedef WIN_CERTIFICATE_UEFI_GUID WIN_CERTIFICATE_UEFI_GUID;
+typedef EFI_STATUS SetVariable(IN CHAR16 *VariableName,IN EFI_GUID *VendorGuid,IN UINT32 Attributes,IN UINTN DataSize,IN VOID *Data);
+typedef struct{ EFI_TIME TimeStamp; WIN_CERTIFICATE_UEFI_GUID AuthInfo; }EFI_VARIABLE_AUTHENTICATION_2;
+typedef struct{ UINT8 Version; UINT8 Type; UINT32 MetadataSize; UINT32 Flags; }EFI_VARIABLE_AUTHENTICATION_3;
+typedef struct{ UINT32 NonceSize; }EFI_VARIABLE_AUTHENTICATION_3_NONCE;
+
+//八章二部四節に記載せらるQueryVariableInfo()の定義
+typedef EFI_STATUS QueryVariableInfo(IN UINT32 Attributes,OUT UINT64 *MaximumVariableStorageSize,OUT UINT64 *RemainingVariableStorageSize,OUT UINT64 *MaximumVariableSize);
+
+//八章二部七節二に記載せらるHardware Error Record Variablesの定義
+#define EFI_HARDWARE_ERROR_VARIABLE {0x414E6BDD,0xE47B,0x47cc,{0xB2,0x44,0xBB,0x61,0x02,0x0C,0xF5,0x16}}
+
+//八章三部一節に記載せらるGetTime()の定義
+typedef EFI_TIME_CAPABILITIES EFI_TIME_CAPABILITIES;
+typedef EFI_STATUS GetTime(OUT EFI_TIME *Time,OUT EFI_TIME_CAPABILITIES *Capabilities OPTIONAL);
+typedef struct{ UINT16 Year; UINT8 Month; UINT8 Day; UINT8 Hour; UINT8 Minute; UINT8 Second; UINT8 Pad1; UINT32 Nanosecond; INT16 TimeZone; UINT8 Daylight; UINT8 Pad2; }EFI_TIME;
+#define EFI_TIME_ADJUST_DAYLIGHT 0x01
+#define EFI_TIME_IN_DAYLIGHT 0x02
+#define EFI_UNSPECIFIED_TIMEZONE 0x07FF
+typedef struct{ UINT32 Resolution; UINT32 Accuracy; BOOLEAN SetsToZero; }EFI_TIME_CAPABILITIES;
+
+//八章三部二節に記載せらるSetTime()の定義
+typedef EFI_STATUS SetTime(IN EFI_TIME *Time);
+
+//八章三部三節に記載せらるGetWakeupTime()の定義
+typedef EFI_STATUS GetWakeupTime(OUT BOOLEAN *Enabled,OUT BOOLEAN *Pending,OUT EFI_TIME *Time);
+
+//八章三部四節に記載せらるSetWakeupTime()の定義
+typedef EFI_STATUS SetWakeupTime(IN BOOLEAN Enable,IN EFI_TIME *Time OPTIONAL);
+
+//八章四部一節に記載せらるSetVirtualAddressMap()の定義
+typedef EFI_STATUS SetVirtualAddressMap(IN UINTN MemoryMapSize,IN UINTN DescriptorSize,IN UINT32 DescriptorVersion,IN EFI_MEMORY_DESCRIPTOR *VirtualMap);
+
+//八章四部二節に記載せらるConvertPointer()の定義
+typedef EFI_STATUS ConvertPointer(IN UINTN DebugDisposition,IN VOID **Address);
+#define EFI_OPTIONAL_PTR 0x00000001
+
+//八章五部一節一に記載せらるResetSystem()の定義
+typedef EFI_RESET_TYPE EFI_RESET_TYPE;
+typedef VOID (EFIAPI *EFI_RESET_SYSTEM)(IN EFI_RESET_TYPE ResetType,IN EFI_STATUS ResetStatus,IN UINTN DataSize,IN VOID *ResetData OPTIONAL);
+typedef enum{EfiResetCold,EfiResetWarm,EfiResetShutdown,EfiResetPlatformSpecific}EFI_RESET_TYPE;
+
+//八章五部二節一に記載せらるGetNextHighMonotonicCount()の定義
+typedef EFI_STATUS GetNextHighMonotonicCount(OUT UINT32 *HighCount);
+
+//八章五部三節一に記載せらるUpdateCapsule()の定義
+typedef EFI_CAPSULE_HEADER EFI_CAPSULE_HEADER;
+typedef EFI_STATUS UpdateCapsule(IN EFI_CAPSULE_HEADER **CapsuleHeaderArray,IN UINTN CapsuleCount,IN EFI_PHYSICAL_ADDRESS ScatterGatherList OPTIONAL);
+typedef struct{ UINT64 Length; union{ EFI_PHYSICAL_ADDRESS DataBlock; EFI_PHYSICAL_ADDRESS ContinuationPointer; }Union; }EFI_CAPSULE_BLOCK_DESCRIPTOR;
+typedef struct{ EFI_GUID CapsuleGuid; UINT32 HeaderSize; UINT32 Flags; UINT32 CapsuleImageSize; }EFI_CAPSULE_HEADER;
+#define CAPSULE_FLAGS_PERSIST_ACROSS_RESET 0x00010000
+#define CAPSULE_FLAGS_POPULATE_SYSTEM_TABLE 0x00020000
+#define CAPSULE_FLAGS_INITIATE_RESET 0x00040000
+typedef struct{ UINT32 CapsuleArrayNumber; VOID* CapsulePtr[1]; }EFI_CAPSULE_TABLE;
+
+//
+
 #endif
