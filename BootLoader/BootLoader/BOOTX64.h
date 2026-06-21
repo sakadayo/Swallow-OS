@@ -1,5 +1,6 @@
 #ifndef __BOOTX64_H__
 #define __BOOTX64_H__
+
 #include <stdint.h>
 
 //二章三部一節に記載せらるデータ型の定義
@@ -453,6 +454,70 @@ typedef struct{ EFI_GUID CapsuleGuid; UINT32 HeaderSize; UINT32 Flags; UINT32 Ca
 #define CAPSULE_FLAGS_INITIATE_RESET 0x00040000
 typedef struct{ UINT32 CapsuleArrayNumber; VOID* CapsulePtr[1]; }EFI_CAPSULE_TABLE;
 
-//
+//八章五部三節三に記載せらるEFI_MEMORY_RANGE_CAPSULE_GUIDの定義
+#define EFI_MEMORY_RANGE_CAPSULE_GUID {0xde9f0ec,0x88b6,0x428f,{0x97,0x7a,0x25,0x8f,0x1d,0xe,0x5e,0x72}}
+typedef struct{ EFI_PHYSICAL_ADDRESS Address; UINT64 Length; }EFI_MEMORY_RANGE;
+typedef struct{ EFI_CAPSULE_HEADER Header; UINT32 OsRequestedMemoryType; UINT64 NumberOfMemoryRanges; EFI_MEMORY_RANGE MemoryRanges[]; }EFI_MEMORY_RANGE_CAPSULE;
+typedef struct{ UINT64 FirmwareMemoryRequirement; UINT64 NumberOfMemoryRanges; }EFI_MEMORY_RANGE_CAPSULE_RESULT;
+
+//八章五部三節四に記載せらるQueryCapsuleCapabilities()の定義
+typedef EFI_STATUS QueryCapsuleCapabilities( IN EFI_CAPSULE_HEADER **CapsuleHeaderArray, IN UINTN CapsuleCount, OUT UINT64 *MaximumCapsuleSize, OUT EFI_RESET_TYPE *ResetType );
+
+//八章五部四節に記載せらるExchanging information between the OS and Firmwareの関係定義
+#define EFI_OS_INDICATIONS_BOOT_TO_FW_UI 0x0000000000000001
+#define EFI_OS_INDICATIONS_TIMESTAMP_REVOCATION 0x0000000000000002
+#define EFI_OS_INDICATIONS_FILE_CAPSULE_DELIVERY_SUPPORTED 0x0000000000000004
+#define EFI_OS_INDICATIONS_FMP_CAPSULE_SUPPORTED 0x0000000000000008
+#define EFI_OS_INDICATIONS_CAPSULE_RESULT_VAR_SUPPORTED 0x0000000000000010
+#define EFI_OS_INDICATIONS_START_OS_RECOVERY 0x0000000000000020
+#define EFI_OS_INDICATIONS_START_PLATFORM_RECOVERY 0x0000000000000040
+#define EFI_OS_INDICATIONS_JSON_CONFIG_DATA_REFRESH 0x0000000000000080
+
+//八章五部六節一に記載せらるEFI_CAPSULE_REPORT_GUIDの定義
+#define EFI_CAPSULE_REPORT_GUID {0x39b68c46,0xf7fb,0x441b,{0xb6,0xec,0x16,0xb0,0xf6,0x98,0x21,0xf3}};
+
+//八章五部六節一ー一に記載せらるStructure of the Capsule Processing ResultVariableの定義
+typedef struct{ UINT32 VariableTotalSize; UINT32 Reserved; EFI_GUID CapsuleGuid; EFI_TIME CapsuleGuid; EFI_STATUS CapsuleStatus; }EFI_CAPSULE_RESULT_VARIABLE_HEADER;
+
+//八章五部六節一ー二に記載せらるAdditionalStructureWhenCapsuleGuidisEFI_FIRMWARE_MANAGEMENT_CAPSULE_ID_GUIDの定義
+typedef struct{ UINT16 Version; UINT8 PayloadIndex; UINT8 UpdateImageIndex; EFI_GUID UpdateImageTypeId; CHAR16 CapsuleFileName[]; CHAR16 CapsuleTarget[]; }EFI_CAPSULE_RESULT_VARIABLE_FMP;
+
+//八章五部六節一ー三に記載せらるAdditionalStructureWhenCapsuleGuidisEFI_JSON_CAPSULE_ID_GUIDの定義
+typedef struct{ UINT32 Version; UINT32 CapsuleId; UINT32 RespLength; UINT8 Resp[]; }EFI_CAPSULE_RESULT_VARIABLE_JSON;
+
+//九章一部一節に記載せらるEFI_LOADED_IMAGE_PROTOCOLの定義
+#define EFI_LOADED_IMAGE_PROTOCOL_GUID { 0x5B1B31A1,0x9562,0x11d2,{0x8E,0x3F,0x00,0xA0,0xC9,0x69,0x72,0x3B}}
+#define EFI_LOADED_IMAGE_PROTOCOL_REVISION 0x1000
+typedef struct{ UINT32 Revision; EFI_HANDLE ParentHandle; EFI_SYSTEM_TABLE *SystemTable; EFI_HANDLE DeviceHandle; EFI_DEVICE_PATH_PROTOCOL *FilePath; VOID *Reserved; UINT32 LoadOptionsSize; VOID *LoadOptions; VOID *ImageBase; UINT64 ImageSize; EFI_MEMORY_TYPE ImageCodeType; EFI_MEMORY_TYPE ImageDataType; EFI_IMAGE UNLOAD Unload; }EFI_LOADED_IMAGE_PROTOCOL;
+
+//九章一部二節に記載せらるEFI_LOADED_IMAGE_PROTOCOL.Unload()の定義
+typedef EFI_STATUS (EFIAPI *EFI_IMAGE_UNLOAD)( IN EFI_HANDLE ImageHandle );
+
+//九章二部一節に記載せらるEFI_LOADED_IMAGE_DEVICE_PATH_PROTOCOLの定義
+#define EFI_LOADED_IMAGE_DEVICE_PATH_PROTOCOL_GUID {0xbc62157e,0x3e33,0x4fec,{0x99,0x20,0x2d,0x3b,0x36,0xd7,0x50,0xdf}}
+
+//十章二部に記載せらるEFI Device Path Protocolの定義
+#define EFI_DEVICE_PATH_PROTOCOL_GUID {0x09576e91,0x6d3f,0x11d2,{0x8e,0x39,0x00,0xa0,0xc9,0x69,0x72,0x3b}}
+typedef struct EFI_DEVICE_PATH_PROTOCOL { UINT8 Type; UINT8 SubType; UINT8 Length[2]; }EFI_DEVICE_PATH_PROTOCOL;
+
+//十章三部四節十六に記載せらるVendor-Defined Messaging Device PathのGUID定義
+#define EFI_PC_ANSI_GUID {0xe0c14753,0xf9be,0x11d2,{0x9a,0x0c,0x00,0x90,0x27,0x3f,0xc1,0x4d}}
+#define EFI_VT_100_GUID {0xdfa66065,0xb419,0x11d3,{0x9a,0x2d,0x00,0x90,0x27,0x3f,0xc1,0x4d}}
+#define EFI_VT_100_PLUS_GUID {0x7baec70b,0x57e0,0x4c76,{0x8e,0x87,0x2f,0x9e,0x28,0x08,0x83,0x43}}
+#define EFI_VT_UTF8_GUID {0xad15a0d6,0x8bec,0x4acf,{0xa0,0x73,0xd0,0x1d,0xe7,0x7e,0x2d,0x88}}
+
+//十章三部四節十七に記載せらるUART Flow Control Messaging Pathの定義
+#define DEVICE_PATH_MESSAGING_UART_FLOW_CONTROL {0x37499a9d,0x542f,0x4c89,{0xa0,0x26,0x35,0xda,0x14,0x20,0x94,0xe4}}
+
+//十章三部五節九に記載せらるRAM DiskのGUID定義
+#define EFI_VIRTUAL_DISK_GUID {0x77AB535A,0x45FC,0x624B,{0x55,0x60,0xF7,0xB2,0x81,0xD1,0xF9,0x6E}}
+#define EFI_VIRTUAL_CD_GUID {0x3D5ABD30,0x4175,0x87CE,{0x6D,0x64,0xD2,0xAD,0xE5,0x23,0xC4,0xBB}}
+#define EFI_PERSISTENT_VIRTUAL_DISK_GUID {0x5CEA02C9,0x4D07,0x69D3,{0x26,0x9F,0x44,0x96,0xFB,0xE0,0x96,0xF9}}
+#define EFI_PERSISTENT_VIRTUAL_CD_GUID {0x08018188,0x42CD,0xBB48,{0x10,0x0F,0x53,0x87,0xD5,0x3D,0xED,0x3D}}
+
+//十章五部一節に記載せらるEFI_DEVICE_PATH_UTILITIES_PROTOCOLの定義
+#define EFI_DEVICE_PATH_UTILITIES_PROTOCOL_GUID {0x379be4e,0xd706,0x437d,{0xb0,0x37,0xed,0xb8,0x2f,0xb7,0x72,0xa4}}
+typedef struct _EFI_DEVICE_PATH_UTILITIES_PROTOCOL{ EFI_DEVICE_PATH_UTILS_GET_DEVICE_PATH_SIZE GetDevicePathSize; EFI_DEVICE_PATH_UTILS_DUP_DEVICE_PATH DuplicateDevicePath; EFI_DEVICE_PATH_UTILS_APPEND_PATH AppendDevicePath; EFI_DEVICE_PATH_UTILS_APPEND_NODE AppendDeviceNode; EFI_DEVICE_PATH_UTILS_APPEND_INSTANCE AppendDevicePathInstance; EFI_DEVICE_PATH_UTILS_GET_NEXT_INSTANCE GetNextDevicePathInstance; EFI_DEVICE_PATH_UTILS_IS_MULTI_INSTANCE IsDevicePathMultiInstance; EFI_DEVICE_PATH_UTILS_CREATE_NODE CreateDeviceNode; }EFI_DEVICE_PATH_UTILITIES_PROTOCOL;
+
 
 #endif
