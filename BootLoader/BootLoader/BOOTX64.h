@@ -691,15 +691,6 @@ typedef EFI_HII_HANDLE EFI_HII_HANDLE;
 typedef EFI_STATUS (EFIAPI *EFI_DRIVER_HEALTH_GET_HEALTH_STATUS)( IN EFI_DRIVER_HEALTH_PROTOCOL *This, IN EFI_HANDLE ControllerHandle, OPTIONAL IN EFI_HANDLE ChildHandle, OPTIONAL OUT EFI_DRIVER_HEALTH_STATUS *HealthStatus, OUT EFI_DRIVER_HEALTH_HII_MESSAGE **MessageList, OPTIONAL OUT EFI_HII_HANDLE *FormHiiHandle OPTIONAL );
 typedef enum{ EfiDriverHealthStatusHealthy, EfiDriverHealthStatusRepairRequired, EfiDriverHealthStatusConfigurationRequired, EfiDriverHealthStatusFailed, EfiDriverHealthStatusReconnectRequired, EfiDriverHealthStatusRebootRequired }EFI_DRIVER_HEALTH_STATUS;
 
-//十一章十部二節に記載せらるEFI_DRIVER_HEALTH_PROTOCOL.GetHealthStatus()の定義
-typedef EFI_DRIVER_HEALTH_STATUS EFI_DRIVER_HEALTH_STATUS;
-typedef EFI_DRIVER_HEALTH_HII_MESSAGE EFI_DRIVER_HEALTH_HII_MESSAGE;
-typedef EFI_HII_HANDLE EFI_HII_HANDLE;
-typedef EFI_STATUS (EFIAPI *EFI_DRIVER_HEALTH_GET_HEALTH_STATUS)( IN EFI_DRIVER_HEALTH_PROTOCOL *This, IN EFI_HANDLE ControllerHandle, OPTIONAL IN EFI_HANDLE ChildHandle, OPTIONAL OUT EFI_DRIVER_HEALTH_STATUS *HealthStatus, OUT EFI_DRIVER_HEALTH_HII_MESSAGE **MessageList, OPTIONAL OUT EFI_HII_HANDLE *FormHiiHandle OPTIONAL );
-typedef enum{ EfiDriverHealthStatusHealthy, EfiDriverHealthStatusRepairRequired, EfiDriverHealthStatusConfigurationRequired, EfiDriverHealthStatusFailed, EfiDriverHealthStatusReconnectRequired, EfiDriverHealthStatusRebootRequired }EFI_DRIVER_HEALTH_STATUS;
-typedef UINT16 EFI_STRING_ID;
-typedef struct{ EFI_HII_HANDLE HiiHandle; EFI_STRING_ID StringId; UINT64 MessageCode; }EFI_DRIVER_HEALTH_HII_MESSAGE;
-
 //十一章十部三節に記載せらるEFI_DRIVER_HEALTH_PROTOCOL.Repair()の定義
 typedef EFI_DRIVER_HEALTH_REPAIR_NOTIFY EFI_DRIVER_HEALTH_REPAIR_NOTIFY;
 typedef EFI_STATUS (EFIAPI *EFI_DRIVER_HEALTH_REPAIR)( IN EFI_DRIVER_HEALTH_PROTOCOL *This, IN EFI_HANDLE ControllerHandle, IN EFI_HANDLE ChildHandle OPTIONAL, IN EFI_DRIVER_HEALTH_REPAIR_NOTIFY RepairNotify OPTIONAL );
