@@ -233,6 +233,36 @@ typedef struct { UINT16 Version; UINT16 NumberOfProfiles; EFI_GUID ConformancePr
 //四章六部五節に記載せらるOther Configuration Tableの定義
 //各章に記載されている為、各章にて取り扱う
 
+//五章二部一節に記載せらるMBR_PARTITION_RECORD及びMASTER_BOOT_RECORDの定義
+#pragma pack(1)
+typedef struct{ UINT8 BootIndicator; UINT8 StartHead; UINT8 StartSector; UINT8 StartTrack; UINT8 OSIndicator; UINT8 EndHead; UINT8 EndSector; UINT8 EndTrack; UINT8 StartingLBA[4]; UINT8 SizeInLBA[4]; }MBR_PARTITION_RECORD;
+typedef struct{ UINT8 BootStrapCode[440]; UINT8 UniqueMbrSignature[4]; UINT8 Unknown[2]; MBR_PARTITION_RECORD Partition[4]; UINT16 Signature; }MASTER_BOOT_RECORD;
+#pragma pack(pop)
+
+//五章三部三節に記載せらるGPT Partition Entry Array節の関連する定義
+#pragma pack(1)
+typedef struct{ EFI_GUID PartitionTypeGUID; EFI_GUID UniquePartitionGUID; EFI_LBA StartingLBA; EFI_LBA EndingLBA; UINT64 Attributes; CHAR16 PartitionName[36]; }EFI_PARTITION_ENTRY;
+#pragma pack(pop)
+
+//六章二部一節に記載せらるBlock Translation Table(BTT) Data Structuresの定義
+#define EFI_BTT_ALIGNMENT 4096
+#define EFI_BTT_INFO_UNUSED_LEN 3968
+#define EFI_BTT_INFO_BLOCK_SIG_LEN 16
+#define EFI_BTT_INFO_FLAGS_ERROR 0x00000001
+#define EFI_BTT_INFO_BLOCK_MAJOR_VERSION 2
+#define EFI_BTT_INFO_BLOCK_MINOR_VERSION 0
+typedef struct _EFI_BTT_INFO_BLOCK{ CHAR8 Sig[EFI_BTT_INFO_BLOCK_SIG_LEN]; EFI_GUID Uuid; EFI_GUID ParentUuid; UINT32 Flags; UINT16 Major; UINT16 Minor; UINT32 ExternalLbaSize; UINT32 ExternalNLba; UINT32 InternalLbaSize; UINT32 InternalNLba; UINT32 NFree; UINT32 InfoSize; UINT64 NextOff; UINT64 DataOff; UINT64 MapOff; UINT64 FlogOff; UINT64 InfoOff; CHAR8 Unused[EFI_BTT_INFO_UNUSED_LEN]; UINT64 Checksum; }EFI_BTT_INFO_BLOCK;
+
+//六章二部二節に記載せらるBTT Map Entryの定義
+typedef struct _EFI_BTT_MAP_ENTRY{ UINT32 PostMapLba : 30; UINT32 Error : 1; UINT32 Zero : 1; }EFI_BTT_MAP_ENTRY;
+
+//六章二部三節に記載せらるBTT Flogの定義
+#define EFI_BTT_FLOG_ENTRY_ALIGNMENT 64
+typedef struct _EFI_BTT_FLOG{ UINT32 Lba0; UINT32 OldMap0; UINT32 NewMap0; UINT32 Seq0; UINT32 Lba1; UINT32 OldMap1; UINT32 NewMap1; UINT32 Seq1; }EFI_BTT_FLOG;
+
+//六章二部五節に記載せらるNVDIMM Label Protocol Address Abstraction Guidの定義
+#define EFI_BTT_ABSTRACTION_GUID {0x18633bfc,0x1735,0x4217,{0x8a,0xc9,0x17,0x23,0x92,0x82,0xd3,0xf8}}
+
 //七章一部一節に記載せらるEFI_BOOT_SERVICE.CreateEvent()の定義
 typedef EFI_EVENT_NOTIFY EFI_EVENT_NOTIFY;
 typedef EFI_STATUS (EFIAPI *EFI_CREATE_EVENT) ( IN UINT32 Type, IN EFI_TPL NotifyTpl, IN EFI_EVENT_NOTIFY NotifyFunction,OPTIONAL IN VOID *NotifyContext,OPTIONAL OUT EFI_EVENT *Event);
