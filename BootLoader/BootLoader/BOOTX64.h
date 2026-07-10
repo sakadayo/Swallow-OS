@@ -56,9 +56,8 @@ typedef struct _EFI_LOAD_OPTION{ UINT32 Attributes; UINT16 FilePathListLength; }
 #define EFI_BOOT_OPTION_SUPPORT_COUNT 0x00000300
 
 //三章一部六節に記載せらるLaunching Boot#### Load Options Using Hot Keysの定義
-typedef EFI_BOOT_KEY_DATA EFI_BOOT_KEY_DATA;
-typedef struct _EFI_KEY_OPTION{ EFI_BOOT_KEY_DATA KeyData; UINT32 BootOptionCrc; UINT16 BootOption; }EFI_KEY_OPTION;
 typedef union{ struct{ UINT32 Revision : 8; UINT32 ShiftPressed : 1; UINT32 ControlPressed: 1; UINT32 AltPressed : 1; UINT32 LogoPressed : 1; UINT32 MenuPressed : 1; UINT32 SysReqPressed : 1; UINT32 Reserved : 16; UINT32 InputKeyCount: 2; }Options; UINT32 PackedValue; }EFI_BOOT_KEY_DATA;
+typedef struct _EFI_KEY_OPTION{ EFI_BOOT_KEY_DATA KeyData; UINT32 BootOptionCrc; UINT16 BootOption; }EFI_KEY_OPTION;
 
 //三章二部一節に記載せらるEFI_BOOT_MANAGER_POLICY_PROTOCOLの定義
 #define EFI_BOOT_MANAGER_POLICY_PROTOCOL_GUID {0xFEDF8E0C,0xE147,0x11E3,{0x99,0x03,0xB8,0xE8,0x56,0x2C,0xBA,0xFA}}
@@ -3344,5 +3343,16 @@ typedef EFI_ARP_FLUSH EFI_ARP_FLUSH;
 typedef EFI_ARP_REQUEST EFI_ARP_REQUEST;
 typedef EFI_ARP_CANCEL EFI_ARP_CANCEL;
 typedef struct _EFI_ARP_PROTOCOL{ EFI_ARP_CONFIGURE Configure; EFI_ARP_ADD Add; EFI_ARP_FIND Find; EFI_ARP_DELETE Delete; EFI_ARP_FLUSH Flush; EFI_ARP_REQUEST Request; EFI_ARP_CANCEL Cancel; }EFI_ARP_PROTOCOL;
+
+//二十九章一部三節に記載せらるEFI_ARP_PROTOCOL.Configure()の定義
+typedef EFI_ARP_CONFIG_DATA EFI_ARP_CONFIG_DATA;
+typedef EFI_STATUS (EFIAPI *EFI_ARP_CONFIGURE)( IN EFI_ARP_PROTOCOL *This, IN EFI_ARP_CONFIG_DATA *ConfigData OPTIONAL );
+typedef struct{ UINT16 SwAddressType; UINT8 SwAddressLength; VOID *StationAddress; UINT32 EntryTimeOut; UINT32 RetryCount; UINT32 RetryTimeOut; }EFI_ARP_CONFIG_DATA;
+
+//二十九章一部四節に記載せらるEFI_ARP_PROTOCOL.Add()の定義
+typedef EFI_STATUS (EFIAPI *EFI_ARP_ADD)( IN EFI_ARP_PROTOCOL *This, IN BOOLEAN DenyFlag; IN VOID *TargetSwAddress OPTIONAL; IN VOID *TargetHwAddress OPTIONAL, IN UINT32 TimeoutValue, IN BOOLEAN Overwrite );
+
+//二十九章一部五節に記載せらるEFI_ARP_PROTOCOL.Find()の定義
+typedef EFI_STATUS (EFIAPI *EFI_ARP_FIND)( IN EFI_ARP_PROTOCOL *This, IN BOOLEAN BySwAddress, IN VOID *AddressBuffer OPTIONAL, OUT UINT32 *EntryLength OPTIONAL, OUT UINT32 *EntryCount OPTIONAL, OUT EFI_ARP_FIND_DATA **Entries OPTIONAL, IN BOOLEAN Refresh ); 
 
 #endif
